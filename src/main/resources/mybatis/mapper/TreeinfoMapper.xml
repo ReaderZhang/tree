@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.summer.tree.dao.TreeinfoMapper">
+    <sql id="TreeColumn">
+        id,
+        distribution,
+        family,
+        genus,
+        species,
+        latin,
+        place_name,
+        specific_place_name,
+        growth_field,
+        longitude,
+        latitude,
+        type,
+        planter,
+        plant_time,
+        age,
+        height,
+        bust,
+        average,
+        ns,
+        ew,
+        growth_condition,
+        environmental,
+        detail,
+        keeper,
+        protect,
+        curing,
+        inquiry_time,
+        likes,
+        pictureurl,
+        zxingurl
+    </sql>
+    <select id="SelectCount" resultType="Integer">
+        select 
+            count(1)
+        from 
+            tree_info
+    </select>
+    <select id="SelectAllTree" resultType="com.summer.tree.pojo.Treeinfo">
+        select 
+            *
+        from 
+            tree_info
+    </select>
+    <select id="SelectByTreeid" resultType="com.summer.tree.pojo.Treeinfo">
+        select 
+            *
+        from 
+            tree_info
+        where 
+            id=#{id}
+    </select>
+    <select id="SelectTreesByLongitudeAndLatitude" resultType="com.summer.tree.pojo.Treeinfo">
+        select
+            *
+        from
+            tree_info
+        where
+            longitude like concat(#{longitude},'%')
+        and
+            latitude like concat(#{latitude},'%')
+    </select>
+    <insert id="InsertTree" parameterType="com.summer.tree.pojo.Treeinfo">
+        insert into
+            tree_info(distribution,family,genus,species,latin,place_name,specific_place_name,growth_field,longitude,latitude,type,planter,plant_time,
+            age,height,bust,average,ns,ew,growth_condition,environmental,detail,keeper,protect,curing,inquiry_time,likes,pictureurl,zxingurl)
+        values (#{distribution},#{family},#{genus},#{species},#{latin},#{place_name},#{specific_place_name},#{growth_field},#{longitude},#{latitude},#{type},#{planter},#{plant_time},
+            #{age},#{height},#{bust},#{average},#{ns},#{ew},#{growth_condition},#{environmental},#{detail},#{keeper},#{protect},#{curing},#{inquiry_time},#{likes},#{pictureurl},#{zxingurl})
+    </insert>
+    <update id="UpdateLikeAdd" parameterType="Integer">
+        update tree_info set tlike=tlike+1 where id=#{id}
+    </update>
+    <update id="UpdateLikeDelete" parameterType="Integer">
+        update tree_info set likes=likes-1 where id=#{id}
+    </update>
+</mapper>

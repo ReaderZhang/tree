@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.summer.tree.dao.NewsMapper">
+    <select id="SelectNewsById" parameterType="Integer" resultType="com.summer.tree.pojo.News">
+        select * from news where id=#{id} and status = 1
+    </select>
+    <select id="SelectNewsByTitle" parameterType="string" resultType="com.summer.tree.pojo.News">
+        select * from news where title=#{title} and status = 1
+    </select>
+    <select id="SelectAllNews" resultType="com.summer.tree.pojo.News">
+        select * from news where status = 1
+    </select>
+    <insert id="InsertNews" parameterType="com.summer.tree.pojo.News">
+        insert into news(title,content,createdate) values (#{title},#{content},#{createdate})
+    </insert>
+    <update id="UpdateNews" parameterType="com.summer.tree.pojo.News">
+        update news set title=#{title},content=#{content},#{createdate} where id=#{id}
+    </update>
+    <update id="UpdateNewsStatus" parameterType="com.summer.tree.pojo.News">
+        update news set 
+        <if test="status!=1">
+            status=1
+        </if>
+        <if test="status!=0">
+            status=0
+        </if>
+    </update>
+</mapper>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.summer.tree.dao.UserpostMapper">
+    <select id="SelectUserpost" resultType="com.summer.tree.pojo.Userpost">
+        select * from user_post
+    </select>
+    <select id="SelectUserpostByPost" resultType="com.summer.tree.pojo.Userpost">
+        select * from user_post where userpost=#{userpost}
+    </select>
+    <insert id="InsertUserpost" parameterType="com.summer.tree.pojo.Userpost">
+        insert into user_post(userpost) values (#{userpost})
+    </insert>
+    <update id="Updatestatus" parameterType="com.summer.tree.pojo.Userpost">
+        update user_post
+        set status=#{status}
+        where userpost=#{userpost}
+        
+
+    </update>
+</mapper>
