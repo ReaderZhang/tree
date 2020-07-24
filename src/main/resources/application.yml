@@ -32,3 +32,9 @@ mybatis:
   mapper-locations: classpath:mybatis/mapper/*.xml
 server:
   port: 9000
+
+fdfs:
+  so-timeout: 1500
+  connect-timeout: 600
+  tracker-list: # tracker地址
+  - 39.97.235.23:22122

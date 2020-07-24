@@ -6,8 +6,12 @@ package com.summer.tree.controller;/*
 import com.summer.tree.Response.ResponseResult;
 import com.summer.tree.pojo.Treeinfo;
 import com.summer.tree.service.TreeinfoService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,6 +23,7 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import static com.summer.tree.util.ZxingUtil.getZxing;
 import static java.lang.String.valueOf;
@@ -38,7 +43,7 @@ public class TreeinfoController {
     @Value ( "${pictureurl}" )
     private String pictureurl;
 
-    @PostMapping(value = "/tree/upload")
+//    @PostMapping(value = "/tree/upload")
     public ResponseResult upload(@RequestParam("file")@RequestBody MultipartFile[] uploadfiles, HttpSession session){
         File targetFile = new File ( picture );
         FileOutputStream out = null;
@@ -82,8 +87,19 @@ public class TreeinfoController {
 //        }catch (IOException e){
 //            return ResponseResult.Fail (e.getMessage ());
 //        }
-
     }
+
+    @PostMapping(value = "/tree/upload")
+    public ResponseResult upload(@RequestParam("files") List<MultipartFile> files){
+        List<String> urls = this.treeinfoService.uploadImage(files);
+        //图片路径插入数据库
+
+        if(CollectionUtils.isEmpty(urls)){
+            return ResponseResult.Fail();
+        }
+        return ResponseResult.Sucess();
+    }
+
     @GetMapping("/tree/findtree/{longitude}/{latitude}/fs")
     public ResponseResult findTree(@PathVariable("longitude")String longitude,@PathVariable("latitude")String latitude){
         System.out.println ("longitude.length==========>"+longitude.length ()+"================>"+longitude);

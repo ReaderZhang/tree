@@ -5,6 +5,7 @@ package com.summer.tree.service;/*
 
 import com.summer.tree.pojo.Treeinfo;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -15,4 +16,7 @@ public interface TreeinfoService {
     List<Treeinfo> findTreesByMapinfo(String longitude,String latitude);
     void addTree(Treeinfo treeinfo);
     Integer findNum();
+
+    List<String> uploadImage(List<MultipartFile> files);
 }
+
