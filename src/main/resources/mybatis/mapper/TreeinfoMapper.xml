@@ -65,7 +65,7 @@
         and
             latitude like concat(#{latitude},'%')
     </select>
-    <insert id="InsertTree" parameterType="com.summer.tree.pojo.Treeinfo">
+        <insert id="InsertTree" parameterType="com.summer.tree.pojo.Treeinfo">
         insert into
             tree_info(distribution,family,genus,species,latin,place_name,specific_place_name,growth_field,longitude,latitude,type,planter,plant_time,
             age,height,bust,average,ns,ew,growth_condition,environmental,detail,keeper,protect,curing,inquiry_time,likes,pictureurl,zxingurl)

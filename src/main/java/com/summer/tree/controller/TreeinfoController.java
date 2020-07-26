@@ -89,16 +89,15 @@ public class TreeinfoController {
 //        }
     }
 
-    @PostMapping(value = "/tree/upload")
-    public ResponseResult upload(@RequestParam("files") List<MultipartFile> files){
-        List<String> urls = this.treeinfoService.uploadImage(files);
-        //图片路径插入数据库
-
-        if(CollectionUtils.isEmpty(urls)){
-            return ResponseResult.Fail();
-        }
-        return ResponseResult.Sucess();
-    }
+//    @PostMapping(value = "/tree/upload")
+//    public ResponseResult updatePicture(@RequestParam("files") List<MultipartFile> files){
+//        List<String> urls = this.treeinfoService.uploadImage(files);
+//
+//        if(CollectionUtils.isEmpty(urls)){
+//            return ResponseResult.Fail();
+//        }
+//        return ResponseResult.Sucess();
+//    }
 
     @GetMapping("/tree/findtree/{longitude}/{latitude}/fs")
     public ResponseResult findTree(@PathVariable("longitude")String longitude,@PathVariable("latitude")String latitude){
@@ -111,25 +110,16 @@ public class TreeinfoController {
         return ResponseResult.Sucess (treeinfoService.findTreesByMapinfo ( longitude, latitude ));
     }
     @PutMapping("/tree/insert")
-    public ResponseResult addInfo(@RequestBody Treeinfo treeinfo, HttpSession session){
+    public ResponseResult addInfo(@RequestBody Treeinfo treeinfo,@RequestParam("files") List<MultipartFile> files){
         String zxinglocalpath = "";
-        String insertpictureurl = null;
+        String pictureUrl = "";
         String zxingname = "";
         String inserturl = "";
-        String[] picturepath = (String[]) ( session.getAttribute ( "pictures" ) );
-        for (int j = 0 ; j< picturepath.length;j++){
-            int count = (int)(Math.random ()*15);
-            for (int i = 0;i<count;i++){
-                zxingname+=(int)(Math.random ()*9);
-            }
-
-            insertpictureurl = insertpictureurl+pictureurl+picturepath[j].substring ( picturepath[j].lastIndexOf ( '/' )+1,picturepath[j].length () )+",";
-        }
-        inserturl+=pictureurl+picturepath[0].substring ( picturepath[0].lastIndexOf ( '/' )+1,picturepath[0].length () );
-        zxinglocalpath+=zxingpath+zxingname;
+        List<String> urls = this.treeinfoService.uploadImage(files);
+        pictureUrl = StringUtils.join(urls, ",");
         getZxing(inserturl,zxinglocalpath+".png");
-        treeinfo.setPictureurl ( insertpictureurl );
-        treeinfo.setZxingurl ( zxingurl+".png" );
+        treeinfo.setPictureurl ( pictureUrl );
+//        treeinfo.setZxingurl ( zxingurl+".png" );
         treeinfoService.addTree ( treeinfo );
         return ResponseResult.Sucess ("登记成功");
     }

@@ -78,7 +78,7 @@ public class TreeinfoServiceImpl implements TreeinfoService {
                 StorePath storePath = this.fastFileStorageClient.uploadFile(file.getInputStream(), file.getSize(), ext, null);
 
                 //回显图片
-                return "http://39.97.235.23:9999/" + storePath.getFullPath();
+                return storePath.getFullPath();
             } catch (IOException e) {
                 e.printStackTrace();
             }
