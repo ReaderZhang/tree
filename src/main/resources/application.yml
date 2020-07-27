@@ -27,9 +27,13 @@ spring:
     useGlobalDataSourceStat: true
     connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
 
-mybatis:
-  config-location: classpath:mybatis/mybatis-config.xml
+mybatis-plus:
   mapper-locations: classpath:mybatis/mapper/*.xml
+  type-aliases-package: com.summer.tree.pojo
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
 server:
   port: 9000
 

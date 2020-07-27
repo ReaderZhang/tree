@@ -7,12 +7,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class TreeApplicationTests {
-    @Autowired
-    private TreeinfoMapper treeinfoMapper;
 
-    @Test
-    void contextLoads() {
-        System.out.println (treeinfoMapper.SelectByTreeid ( 1 ));
-    }
 
 }

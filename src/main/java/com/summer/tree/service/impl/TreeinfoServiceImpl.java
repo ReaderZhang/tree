@@ -47,7 +47,7 @@ public class TreeinfoServiceImpl implements TreeinfoService {
 
     @Override
     public void addTree(Treeinfo treeinfo) {
-        treeinfoMapper.InsertTree(treeinfo);
+        treeinfoMapper.insert(treeinfo);
     }
 
     @Override

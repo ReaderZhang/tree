@@ -1,60 +1,111 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.summer.tree.dao.TreeinfoMapper">
-    <sql id="TreeColumn">
-        id,
-        distribution,
-        family,
-        genus,
-        species,
-        latin,
-        place_name,
-        specific_place_name,
-        growth_field,
-        longitude,
-        latitude,
-        type,
-        planter,
-        plant_time,
-        age,
-        height,
-        bust,
-        average,
-        ns,
-        ew,
-        growth_condition,
-        environmental,
-        detail,
-        keeper,
-        protect,
-        curing,
-        inquiry_time,
-        likes,
-        pictureurl,
-        zxingurl
-    </sql>
+    <resultMap id="BaseResultMap" type="com.summer.tree.pojo.Treeinfo">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="number" jdbcType="VARCHAR" property="number"/>
+        <result column="type" jdbcType="INTEGER" property="type"/>
+        <result column="distribution" jdbcType="VARCHAR" property="distribution"/>
+        <result column="family" jdbcType="VARCHAR" property="family"/>
+        <result column="genus" jdbcType="VARCHAR" property="genus"/>
+        <result column="species" jdbcType="VARCHAR" property="species"/>
+        <result column="alias" jdbcType="VARCHAR" property="alias"/>
+        <result column="latin" jdbcType="VARCHAR" property="latin"/>
+        <result column="place_name" jdbcType="VARCHAR" property="placeName"/>
+        <result column="specific_place_name" jdbcType="VARCHAR" property="specificPlaceName"/>
+        <result column="growth_field" jdbcType="VARCHAR" property="growthField"/>
+        <result column="longitude" jdbcType="VARCHAR" property="longitude"/>
+        <result column="latitude" jdbcType="VARCHAR" property="latitude"/>
+        <result column="ownership" jdbcType="VARCHAR" property="ownership"/>
+        <result column="form" jdbcType="VARCHAR" property="form"/>
+        <result column="planter" jdbcType="VARCHAR" property="planter"/>
+        <result column="plant_time" jdbcType="VARCHAR" property="plantTime"/>
+        <result column="estimate_age" jdbcType="VARCHAR" property="estimateAge"/>
+        <result column="real_age" jdbcType="VARCHAR" property="realAge"/>
+        <result column="height" jdbcType="DOUBLE" property="height"/>
+        <result column="bust" jdbcType="VARCHAR" property="bust"/>
+        <result column="average" jdbcType="DOUBLE" property="average"/>
+        <result column="ns" jdbcType="DOUBLE" property="ns"/>
+        <result column="ew" jdbcType="DOUBLE" property="ew"/>
+        <result column="growth_condition" jdbcType="VARCHAR" property="growthCondition"/>
+        <result column="environmental" jdbcType="VARCHAR" property="environmental"/>
+        <result column="remarks" jdbcType="VARCHAR" property="remarks"/>
+        <result column="detail" jdbcType="VARCHAR" property="detail"/>
+        <result column="keep_unit" jdbcType="VARCHAR" property="keepUnit"/>
+        <result column="keeper" jdbcType="VARCHAR" property="keeper"/>
+        <result column="protect" jdbcType="VARCHAR" property="protect"/>
+        <result column="reason" jdbcType="VARCHAR" property="reason"/>
+        <result column="environmental_factor" jdbcType="VARCHAR" property="environmentalFactor"/>
+        <result column="curing" jdbcType="VARCHAR" property="curing"/>
+        <result column="inquiry_time" jdbcType="VARCHAR" property="inquiryTime"/>
+        <result column="likes" jdbcType="BIGINT" property="likes"/>
+        <result column="isdraw" jdbcType="VARCHAR" property="isdraw"/>
+        <result column="pictureurl" jdbcType="VARCHAR" property="pictureurl"/>
+        <result column="zxingurl" jdbcType="VARCHAR" property="zxingurl"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, `number`, `type`, distribution, family, genus, species, `alias`, latin, place_name, 
+    specific_place_name, growth_field, longitude, latitude, ownership, form, planter, 
+    plant_time, estimate_age, real_age, height, bust, average, ns, ew, growth_condition, 
+    environmental, remarks, detail, keep_unit, keeper, protect, reason, environmental_factor, 
+    curing, inquiry_time, likes, isdraw, pictureurl, zxingurl
+  </sql>
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.summer.tree.pojo.Treeinfo" useGeneratedKeys="true">
+    insert into tree_info (`number`, `type`, distribution, 
+      family, genus, species, 
+      `alias`, latin, place_name, 
+      specific_place_name, growth_field, longitude, 
+      latitude, ownership, form, 
+      planter, plant_time, estimate_age, 
+      real_age, height, bust, 
+      average, ns, ew, growth_condition, 
+      environmental, remarks, detail, 
+      keep_unit, keeper, protect, 
+      reason, environmental_factor, curing, 
+      inquiry_time, likes, isdraw, 
+      pictureurl, zxingurl)
+    values (#{number,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, #{distribution,jdbcType=VARCHAR}, 
+      #{family,jdbcType=VARCHAR}, #{genus,jdbcType=VARCHAR}, #{species,jdbcType=VARCHAR}, 
+      #{alias,jdbcType=VARCHAR}, #{latin,jdbcType=VARCHAR}, #{placeName,jdbcType=VARCHAR}, 
+      #{specificPlaceName,jdbcType=VARCHAR}, #{growthField,jdbcType=VARCHAR}, #{longitude,jdbcType=VARCHAR}, 
+      #{latitude,jdbcType=VARCHAR}, #{ownership,jdbcType=VARCHAR}, #{form,jdbcType=VARCHAR}, 
+      #{planter,jdbcType=VARCHAR}, #{plantTime,jdbcType=VARCHAR}, #{estimateAge,jdbcType=VARCHAR}, 
+      #{realAge,jdbcType=VARCHAR}, #{height,jdbcType=DOUBLE}, #{bust,jdbcType=VARCHAR}, 
+      #{average,jdbcType=DOUBLE}, #{ns,jdbcType=DOUBLE}, #{ew,jdbcType=DOUBLE}, #{growthCondition,jdbcType=VARCHAR}, 
+      #{environmental,jdbcType=VARCHAR}, #{remarks,jdbcType=VARCHAR}, #{detail,jdbcType=VARCHAR}, 
+      #{keepUnit,jdbcType=VARCHAR}, #{keeper,jdbcType=VARCHAR}, #{protect,jdbcType=VARCHAR}, 
+      #{reason,jdbcType=VARCHAR}, #{environmentalFactor,jdbcType=VARCHAR}, #{curing,jdbcType=VARCHAR}, 
+      #{inquiryTime,jdbcType=VARCHAR}, #{likes,jdbcType=BIGINT}, #{isdraw,jdbcType=VARCHAR}, 
+      #{pictureurl,jdbcType=VARCHAR}, #{zxingurl,jdbcType=VARCHAR})
+  </insert>
+
+    <update id="UpdateLikeAdd" parameterType="Integer">
+        update tree_info set tlike=tlike+1 where id=#{id}
+    </update>
+    <update id="UpdateLikeDelete" parameterType="Integer">
+        update tree_info set likes=likes-1 where id=#{id}
+    </update>
+    <select id="SelectByTreeid" resultType="com.summer.tree.pojo.Treeinfo">
+        select
+            *
+        from
+            tree_info
+        where
+            id=#{id}
+    </select>
     <select id="SelectCount" resultType="Integer">
-        select 
+        select
             count(1)
-        from 
+        from
             tree_info
     </select>
     <select id="SelectAllTree" resultType="com.summer.tree.pojo.Treeinfo">
-        select 
+        select
             *
-        from 
+        from
             tree_info
     </select>
-    <select id="SelectByTreeid" resultType="com.summer.tree.pojo.Treeinfo">
-        select 
-            *
-        from 
-            tree_info
-        where 
-            id=#{id}
-    </select>
+
     <select id="SelectTreesByLongitudeAndLatitude" resultType="com.summer.tree.pojo.Treeinfo">
         select
             *
@@ -65,17 +116,4 @@
         and
             latitude like concat(#{latitude},'%')
     </select>
-        <insert id="InsertTree" parameterType="com.summer.tree.pojo.Treeinfo">
-        insert into
-            tree_info(distribution,family,genus,species,latin,place_name,specific_place_name,growth_field,longitude,latitude,type,planter,plant_time,
-            age,height,bust,average,ns,ew,growth_condition,environmental,detail,keeper,protect,curing,inquiry_time,likes,pictureurl,zxingurl)
-        values (#{distribution},#{family},#{genus},#{species},#{latin},#{place_name},#{specific_place_name},#{growth_field},#{longitude},#{latitude},#{type},#{planter},#{plant_time},
-            #{age},#{height},#{bust},#{average},#{ns},#{ew},#{growth_condition},#{environmental},#{detail},#{keeper},#{protect},#{curing},#{inquiry_time},#{likes},#{pictureurl},#{zxingurl})
-    </insert>
-    <update id="UpdateLikeAdd" parameterType="Integer">
-        update tree_info set tlike=tlike+1 where id=#{id}
-    </update>
-    <update id="UpdateLikeDelete" parameterType="Integer">
-        update tree_info set likes=likes-1 where id=#{id}
-    </update>
 </mapper>

@@ -103,23 +103,23 @@ public class TreeinfoController {
     public ResponseResult findTree(@PathVariable("longitude")String longitude,@PathVariable("latitude")String latitude){
         System.out.println ("longitude.length==========>"+longitude.length ()+"================>"+longitude);
         System.out.println ("latitude.length==========>"+latitude.length ()+"===============>"+latitude);
-        longitude = longitude.substring ( 0,longitude.indexOf ( '.' )+3 );
-        latitude = latitude.substring ( 0,latitude.indexOf ( '.' )+3 );
+//        longitude = longitude.substring ( 0,longitude.indexOf ( '.' )+3 );
+//        latitude = latitude.substring ( 0,latitude.indexOf ( '.' )+3 );
         System.out.println ("longitude.length==========>"+longitude.length ()+"================>"+longitude);
         System.out.println ("latitude.length==========>"+latitude.length ()+"===============>"+latitude);
         return ResponseResult.Sucess (treeinfoService.findTreesByMapinfo ( longitude, latitude ));
     }
-    @PutMapping("/tree/insert")
-    public ResponseResult addInfo(@RequestBody Treeinfo treeinfo,@RequestParam("files") List<MultipartFile> files){
+    @PostMapping("/tree/insert")
+    public ResponseResult addInfo( Treeinfo treeinfo,@RequestParam("files") List<MultipartFile> files){
         String zxinglocalpath = "";
         String pictureUrl = "";
         String zxingname = "";
         String inserturl = "";
         List<String> urls = this.treeinfoService.uploadImage(files);
         pictureUrl = StringUtils.join(urls, ",");
-        getZxing(inserturl,zxinglocalpath+".png");
+//        getZxing(inserturl,zxinglocalpath+".png");
         treeinfo.setPictureurl ( pictureUrl );
-//        treeinfo.setZxingurl ( zxingurl+".png" );
+        treeinfo.setZxingurl ("" );
         treeinfoService.addTree ( treeinfo );
         return ResponseResult.Sucess ("登记成功");
     }
