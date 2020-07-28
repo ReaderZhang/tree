@@ -7,9 +7,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+
+import java.util.Date;
 
 @Data
 @TableName("tree_info")
@@ -181,6 +180,10 @@ public class Treeinfo {
     private String curing;
 
     /**
+     * 创建时间
+     */
+    private Date createTime;
+    /**
      * 调查日期
      */
     private String inquiryTime;
@@ -189,6 +192,13 @@ public class Treeinfo {
 
     private String environmentalFactor;
 
+    /**
+     * 是否为审核中
+     */
+    private int status;
+    /**
+     * 是否为游客画
+     */
     private String isdraw;
     /**
      * 点赞数
