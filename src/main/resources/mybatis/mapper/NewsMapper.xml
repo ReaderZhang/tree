@@ -10,7 +10,10 @@
         select * from news where title=#{title} and status = 1
     </select>
     <select id="SelectAllNews" resultType="com.summer.tree.pojo.News">
-        select * from news where status = 1
+        select * from news
+    </select>
+    <select id="SelectNewsByStatus" resultType="com.summer.tree.pojo.News" parameterType="int">
+        select * from news where status = #{status}
     </select>
     <insert id="InsertNews" parameterType="com.summer.tree.pojo.News">
         insert into news(title,content,createdate) values (#{title},#{content},#{createdate})

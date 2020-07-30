@@ -32,10 +32,7 @@ public class TreeinfoServiceImpl implements TreeinfoService {
     TreeinfoMapper treeinfoMapper;
     @Autowired
     PreparerMapper preparerMapper;
-    @Autowired
-    private FastFileStorageClient fastFileStorageClient;
-    //定义可上传的文件类型
-    private static final List<String> CONTENT_TYPES = Arrays.asList("image/jpeg", "image/png");
+
 
 
     @Override
@@ -67,38 +64,6 @@ public class TreeinfoServiceImpl implements TreeinfoService {
         return treeinfoMapper.SelectCount();
     }
 
-    @Override
-    public List<String> uploadImage(List<MultipartFile> files) {
-        List<String> urls = files.stream().map(file -> {
-            String originalFilename = file.getOriginalFilename();
-
-            //检验文件类型
-            String contentType = file.getContentType();
-            if (!CONTENT_TYPES.contains(contentType)) {
-                return null;
-            }
-
-            try {
-                //检验文件内容
-                BufferedImage bufferedImage = ImageIO.read(file.getInputStream());
-                if (bufferedImage == null) {
-                    return null;
-                }
-
-                //保存
-                String ext = StringUtils.substringAfterLast(originalFilename, ".");
-                StorePath storePath = this.fastFileStorageClient.uploadFile(file.getInputStream(), file.getSize(), ext, null);
-
-                //回显图片
-                return storePath.getFullPath();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }).collect(Collectors.toList());
-
-        return urls;
-    }
 
     @Override
     public List<Treeinfo> filter(FilterDto filterDto) {

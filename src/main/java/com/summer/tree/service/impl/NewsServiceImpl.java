@@ -16,13 +16,13 @@ public class NewsServiceImpl implements NewsService {
     @Autowired
     private NewsMapper newsMapper;
     @Override
-    public List<News> queryNews() {
+    public List<News> getAll() {
         return newsMapper.SelectAllNews ();
     }
 
     @Override
     public void addNews(News news) {
-        newsMapper.InsertNews ( news);
+        newsMapper.insert ( news);
     }
 
     @Override
@@ -44,4 +44,10 @@ public class NewsServiceImpl implements NewsService {
     public News queryANews2(Integer id) {
         return newsMapper.SelectNewsById ( id );
     }
+
+    @Override
+    public List<News> getNews(int status) {
+        return newsMapper.SelectNewsByStatus(status);
+    }
+
 }

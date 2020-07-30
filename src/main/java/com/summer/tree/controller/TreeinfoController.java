@@ -9,6 +9,7 @@ import com.summer.tree.dto.FilterDto;
 import com.summer.tree.pojo.Preparer;
 import com.summer.tree.pojo.Treeinfo;
 import com.summer.tree.service.TreeinfoService;
+import com.summer.tree.util.FileUtil;
 import com.summer.tree.vo.TreeinfoVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,9 @@ import static java.lang.String.valueOf;
 public class TreeinfoController {
     @Autowired
     private TreeinfoService treeinfoService;
+    @Autowired
+    private FileUtil fileUtil;
+
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
     @Value("${Zxingpath}")
     private String zxingpath;
@@ -107,8 +111,8 @@ public class TreeinfoController {
     public ResponseResult findTree(@PathVariable("longitude") String longitude, @PathVariable("latitude") String latitude) {
         System.out.println("longitude.length==========>" + longitude.length() + "================>" + longitude);
         System.out.println("latitude.length==========>" + latitude.length() + "===============>" + latitude);
-//        longitude = longitude.substring ( 0,longitude.indexOf ( '.' )+3 );
-//        latitude = latitude.substring ( 0,latitude.indexOf ( '.' )+3 );
+        longitude = longitude.substring ( 0,longitude.indexOf ( '.' )+3 );
+        latitude = latitude.substring ( 0,latitude.indexOf ( '.' )+3 );
         System.out.println("longitude.length==========>" + longitude.length() + "================>" + longitude);
         System.out.println("latitude.length==========>" + latitude.length() + "===============>" + latitude);
         return ResponseResult.Sucess(treeinfoService.findTreesByMapinfo(longitude, latitude));
@@ -120,7 +124,7 @@ public class TreeinfoController {
         String pictureUrl = "";
         String zxingname = "";
         String inserturl = "";
-        List<String> urls = this.treeinfoService.uploadImage(files);
+        List<String> urls = fileUtil.uploadImage(files);
         pictureUrl = StringUtils.join(urls, ",");
 //        getZxing(inserturl,zxinglocalpath+".png");
         treeinfo.setPictureurl(pictureUrl);
@@ -133,7 +137,7 @@ public class TreeinfoController {
     @PostMapping("/tree/update")
     public ResponseResult update(Treeinfo treeinfo, Preparer preparer, @RequestParam("files") List<MultipartFile> files) {
         String pictureUrl = "";
-        List<String> urls = this.treeinfoService.uploadImage(files);
+        List<String> urls = fileUtil.uploadImage(files);
         pictureUrl = StringUtils.join(urls, ",");
         treeinfo.setPictureurl(pictureUrl);
         treeinfo.setZxingurl("");
@@ -184,8 +188,8 @@ public class TreeinfoController {
         return ResponseResult.Sucess(treeinfoService.findTrees());
     }
 
-    @GetMapping("tree/filter")
-    public ResponseResult filter( FilterDto filterDto) {
+    @PostMapping("tree/filter")
+    public ResponseResult filter(@RequestBody FilterDto filterDto) {
         List<Treeinfo> treeinfos = treeinfoService.filter(filterDto);
         return ResponseResult.Sucess(treeinfos);
     }

@@ -10,10 +10,18 @@ import java.util.List;
 
 @Service
 public interface NewsService {
-    List<News> queryNews();
+    List<News> getAll();
+
     void addNews(News news);
+
     void removeNews(News news);
+
     void changeNews(News news);
+
     News queryANews1(String title);
+
     News queryANews2(Integer id);
+
+
+    List<News> getNews(int status);
 }
