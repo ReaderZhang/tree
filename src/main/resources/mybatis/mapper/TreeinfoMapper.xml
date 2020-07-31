@@ -118,7 +118,7 @@
     <delete id="CheckDown" parameterType="long">
         delete from tree_info where id = #{id}
     </delete>
-    <select id="SelectByTreeid" resultType="com.summer.tree.pojo.Treeinfo">
+    <select id="SelectByTreeid" resultType="com.summer.tree.pojo.Treeinfo" parameterType="long">
         select
             *
         from

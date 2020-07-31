@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.tobato.fastdfs.domain.StorePath;
 import com.github.tobato.fastdfs.service.FastFileStorageClient;
 import com.summer.tree.dao.PreparerMapper;
+import com.summer.tree.dao.TreeGroupMapper;
 import com.summer.tree.dao.TreeinfoMapper;
 import com.summer.tree.dto.FilterDto;
 import com.summer.tree.pojo.Preparer;
@@ -32,6 +33,8 @@ public class TreeinfoServiceImpl implements TreeinfoService {
     TreeinfoMapper treeinfoMapper;
     @Autowired
     PreparerMapper preparerMapper;
+    @Autowired
+    private TreeGroupMapper treeGroupMapper;
 
 
 
@@ -41,7 +44,7 @@ public class TreeinfoServiceImpl implements TreeinfoService {
     }
 
     @Override
-    public Treeinfo findTreeByid(int id) {
+    public Treeinfo findTreeByid(Long id) {
         return treeinfoMapper.SelectByTreeid(id);
     }
 
@@ -120,5 +123,18 @@ public class TreeinfoServiceImpl implements TreeinfoService {
         treeinfoMapper.deleteBatchIds(Arrays.asList(ids));
     }
 
+    @Override
+    public List<String> getAreaByNum(String number) {
+
+        String point = treeGroupMapper.SelectPointsByNum(number);
+        String[] points = point.split("&");
+        List<String> pointList = Arrays.asList(points);
+        pointList.forEach(System.out::println);
+        return pointList;
+    }
+
+    public List<String> getAllGroupNum(){
+        return treeGroupMapper.SelectAllNum();
+    }
 
 }

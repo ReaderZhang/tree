@@ -18,7 +18,7 @@ public interface TreeinfoMapper extends BaseMapper<Treeinfo> {
     //获得所有树的信息
     List<Treeinfo> SelectAllTree();
     //根据树的id获得树的信息
-    Treeinfo SelectByTreeid(int id);
+    Treeinfo SelectByTreeid(Long id);
     //根据对应经纬度进行模糊查询
     List<Treeinfo> SelectTreesByLongitudeAndLatitude(@Param ( "longitude" ) String longitude, @Param ( "latitude" ) String latitude);
     //点赞

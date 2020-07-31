@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -217,6 +218,23 @@ public class TreeinfoController {
         return ResponseResult.Sucess("审核删除");
     }
 
+    @GetMapping("/treedetail/{id}")
+    public ResponseResult getTreeById(@PathVariable("id")Long id){
+        Treeinfo treeinfo = treeinfoService.findTreeByid(id);
+        return ResponseResult.Sucess(treeinfo);
+    }
+
+    @GetMapping("/group/{number}")
+    public ResponseResult getAreaByNum(@PathVariable("number")String number){
+        List<String> pointList = treeinfoService.getAreaByNum(number);
+        return ResponseResult.Sucess(pointList);
+    }
+
+    @GetMapping("/group/num")
+    public ResponseResult getAllGroupNum(){
+        List<String> groupNum = treeinfoService.getAllGroupNum();
+        return ResponseResult.Sucess(groupNum);
+    }
 
 
 }

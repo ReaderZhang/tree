@@ -14,7 +14,7 @@ import java.util.List;
 @Service
 public interface TreeinfoService {
     List<Treeinfo> findTrees();
-    Treeinfo findTreeByid(int treeid);
+    Treeinfo findTreeByid(Long treeid);
     List<Treeinfo> findTreesByMapinfo(String longitude,String latitude);
     void addTree(Treeinfo treeinfo, Preparer preparer);
     Integer findNum();
@@ -27,5 +27,10 @@ public interface TreeinfoService {
     void CheckPass(Long[] ids);
 
     void CheckDown(Long[] ids);
-}
+
+    List<String> getAreaByNum(String number);
+
+    List<String> getAllGroupNum();
+
+    }
 
