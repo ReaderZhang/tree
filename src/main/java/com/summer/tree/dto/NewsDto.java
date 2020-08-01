@@ -9,5 +9,6 @@ import lombok.Data;
 public class NewsDto {
     private String title;
     private String content;
+    private int status;
 
 }

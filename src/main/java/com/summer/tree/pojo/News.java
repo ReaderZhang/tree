@@ -14,5 +14,6 @@ public class News {
     private String content;
     private String createdate;
     private int status;
+    private String poster;
     private String image;
 }

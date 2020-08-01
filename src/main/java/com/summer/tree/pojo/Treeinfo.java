@@ -182,7 +182,7 @@ public class Treeinfo {
     /**
      * 创建时间
      */
-    private Date createTime;
+    private String createTime;
     /**
      * 调查日期
      */

@@ -3,6 +3,9 @@ package com.summer.tree.service.impl;/*
 @create 2020-07-11  18:07
 */
 
+import cn.hutool.core.date.DateField;
+import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.tobato.fastdfs.domain.StorePath;
 import com.github.tobato.fastdfs.service.FastFileStorageClient;
@@ -13,19 +16,21 @@ import com.summer.tree.dto.FilterDto;
 import com.summer.tree.pojo.Preparer;
 import com.summer.tree.pojo.Treeinfo;
 import com.summer.tree.service.TreeinfoService;
+import com.summer.tree.util.ZXingUtil;
 import com.summer.tree.vo.TreeinfoVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.UUID;
 
 @Service
 public class TreeinfoServiceImpl implements TreeinfoService {
@@ -35,7 +40,10 @@ public class TreeinfoServiceImpl implements TreeinfoService {
     PreparerMapper preparerMapper;
     @Autowired
     private TreeGroupMapper treeGroupMapper;
+    @Autowired
+    private FastFileStorageClient fastFileStorageClient;
 
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
 
     @Override
@@ -58,7 +66,7 @@ public class TreeinfoServiceImpl implements TreeinfoService {
     public void addTree(Treeinfo treeinfo, Preparer preparer) {
         treeinfoMapper.insert(treeinfo);
         preparerMapper.insert(preparer);
-        preparerMapper.insertPreparer_Tree(treeinfo.getId(), preparer.getId());
+        preparerMapper.insertPreparer_Tree(preparer.getId(), treeinfo.getId());
 
     }
 
@@ -94,6 +102,13 @@ public class TreeinfoServiceImpl implements TreeinfoService {
         if (StringUtils.isNotBlank(distribution)) {
             wrapper.lambda().eq(Treeinfo::getDistribution, distribution);
         }
+        String month = filterDto.getMonth();
+        if (StringUtils.isNotBlank(month)){
+            int offset = Integer.parseInt("-" + month);
+            DateTime dateTime = DateUtil.offset(new Date(), DateField.MONTH,offset);
+            String dateString = sdf.format(dateTime);
+            wrapper.lambda().ge(Treeinfo::getCreateTime,dateString);
+        }
         wrapper.lambda().eq(Treeinfo::getStatus, 2);
         List<Treeinfo> treeinfos = treeinfoMapper.selectList(wrapper);
         return treeinfos;
@@ -105,11 +120,27 @@ public class TreeinfoServiceImpl implements TreeinfoService {
     }
 
 
+    /**
+     * 审核通过
+     * @param ids
+     */
     @Override
     @Transactional
     public void CheckPass(Long[] ids) {
         for (Long id : ids) {
-            treeinfoMapper.CheckPass(id);
+            String name = UUID.randomUUID().toString().substring(0, 6) + ".jpg";
+            String content = "http://czhhzc.cn:9000/treedetail/"+id;
+            ZXingUtil.generateQRImage(name, content, "jpg");
+            File file = new File("/usr/local/javaresource/" + name);
+            FileInputStream inputStream = null;
+            try {
+                inputStream = new FileInputStream(file);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            StorePath storePath = fastFileStorageClient.uploadFile(inputStream, file.length(), "jpg", null);
+            String url = storePath.getFullPath();
+            treeinfoMapper.CheckPass(id,url);
             //查看有无oldId 该树是新增还是修改
             Long oldId = treeinfoMapper.CheckStatus(id);
             if (oldId != null) {
@@ -133,7 +164,7 @@ public class TreeinfoServiceImpl implements TreeinfoService {
         return pointList;
     }
 
-    public List<String> getAllGroupNum(){
+    public List<String> getAllGroupNum() {
         return treeGroupMapper.SelectAllNum();
     }
 

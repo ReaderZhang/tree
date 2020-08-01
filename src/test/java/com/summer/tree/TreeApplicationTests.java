@@ -1,5 +1,8 @@
 //package com.summer.tree;
 //
+//import cn.hutool.core.date.DateField;
+//import cn.hutool.core.date.DateTime;
+//import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 //import com.github.tobato.fastdfs.domain.StorePath;
 //import com.github.tobato.fastdfs.service.FastFileStorageClient;
 //import com.google.zxing.WriterException;
@@ -7,14 +10,10 @@
 //import com.summer.tree.dao.TreeMapper;
 //import com.summer.tree.dao.TreeinfoMapper;
 //import com.summer.tree.pojo.Tree;
+//import com.summer.tree.pojo.TreeGroup;
+//import com.summer.tree.pojo.Treeinfo;
 //import com.summer.tree.util.FileUtil;
 //import com.summer.tree.util.GPSUtil;
-//import com.summer.tree.util.ZXingUtil2;
-//import org.apache.commons.lang3.StringUtils;
-//import org.jsoup.Jsoup;
-//import org.jsoup.nodes.Document;
-//import org.jsoup.nodes.Element;
-//import org.jsoup.select.Elements;
 //import org.junit.jupiter.api.Test;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.boot.test.context.SpringBootTest;
@@ -22,10 +21,7 @@
 //import java.io.File;
 //import java.io.FileInputStream;
 //import java.io.IOException;
-//import java.util.ArrayList;
-//import java.util.Arrays;
-//import java.util.List;
-//import java.util.UUID;
+//import java.util.*;
 //
 //@SpringBootTest
 //class TreeApplicationTests {
@@ -36,8 +32,10 @@
 //    private FastFileStorageClient fastFileStorageClient;
 //    @Autowired
 //    private TreeGroupMapper treeGroupMapper;
-//
-//
+//    @Autowired
+//    private TreeinfoMapper treeinfoMapper;
+
+
 //    @Test
 //    public void test() throws IOException {
 //        File html = new File("C:\\Users\\PC\\Desktop\\群落范例\\“湛江市博物馆群落”文件夹\\1.html");
@@ -78,8 +76,8 @@
 //        tree.setImage(pathResult);
 //        treeMapper.insert(tree);
 //    }
-//
-//    //    }
+
+    //    }
 //    @Test
 //    public void getQR() throws IOException {
 //        String name = UUID.randomUUID().toString().substring(0, 6) + ".jpg";
@@ -96,6 +94,5 @@
 //            treeMapper.updateImage(url, id);
 //        }
 //    }
-//
-//
 //}
+

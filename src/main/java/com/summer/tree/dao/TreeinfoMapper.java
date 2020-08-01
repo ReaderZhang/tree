@@ -9,7 +9,9 @@ import com.summer.tree.vo.TreeinfoVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
+import java.util.Date;
 import java.util.List;
 @Mapper
 public interface TreeinfoMapper extends BaseMapper<Treeinfo> {
@@ -28,7 +30,7 @@ public interface TreeinfoMapper extends BaseMapper<Treeinfo> {
 
     List<TreeinfoVo> SelectAllCheckTree();
 
-    void CheckPass(Long id);
+    void CheckPass(Long id,String url);
 
     void CheckDown(Long id);
 

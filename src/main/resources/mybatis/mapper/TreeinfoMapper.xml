@@ -102,7 +102,7 @@
             <result column="name" property="name"></result>
             <result column="phone" property="phone"></result>
             <result column="email" property="email"></result>
-            <result column="create_time" property="createTime"></result>
+            <result column="ptime" property="createTime"></result>
         </association>
     </resultMap>
 
@@ -112,8 +112,8 @@
     <update id="UpdateLikeDelete" parameterType="Integer">
         update tree_info set likes=likes-1 where id=#{id}
     </update>
-    <update id="CheckPass" parameterType="long">
-        update tree_info set status = 2 where id = #{id}
+    <update id="CheckPass" parameterType="string">
+        update tree_info set status = 2 ,zxingurl = url where id = #{id}
     </update>
     <delete id="CheckDown" parameterType="long">
         delete from tree_info where id = #{id}
@@ -154,7 +154,7 @@
             status = 2
     </select>
     <select id="SelectAllCheckTree" resultMap="treeinfoVoMap">
-       SELECT t.*,p.name ,p.phone,p.email , p.create_time
+       SELECT t.*,p.name ,p.phone,p.email , p.create_time as ptime
         from tree_info t
         left join preparer_tree pt on t.id = pt.tid
         left join preparer p on p.id = pt.pid

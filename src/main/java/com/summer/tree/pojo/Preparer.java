@@ -27,6 +27,6 @@ public class Preparer {
 
     private Long oldid ;
 
-    private Date createTime;
+    private String createTime;
 }
 

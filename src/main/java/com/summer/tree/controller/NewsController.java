@@ -16,17 +16,17 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 @Slf4j
 @RestController
 public class NewsController {
-    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
     @Autowired
     private NewsService newsService;
-    @Autowired
-    private FileUtil fileUtil;
+
 
     @GetMapping("/manager/news/{status}")
     public ResponseResult getnews(@PathVariable("status") int status) {
@@ -39,17 +39,11 @@ public class NewsController {
         return ResponseResult.Sucess(news);
     }
 
-    @PutMapping("/manager/news/insert")
-    public ResponseResult insert(NewsDto newsDto, @RequestParam("image") List<MultipartFile> files) {
-        String pictureUrl = "";
-        News news = new News();
-        List<String> urls = fileUtil.uploadImage(files);
-        pictureUrl = StringUtils.join(urls, ",");
-        news.setImage(pictureUrl);
-        news.setTitle(newsDto.getTitle());
-        news.setContent(newsDto.getContent());
-        news.setCreatedate(sdf.format(new Date()));
-        newsService.addNews(news);
+
+    @PostMapping("/manager/news/insert")
+    public ResponseResult insert(NewsDto newsDto, @RequestParam(value = "image",required = false) List<MultipartFile> files,@RequestParam(value = "poster",required = false) List<MultipartFile> poster ){
+
+        newsService.addNews(newsDto,files,poster);
         return ResponseResult.Sucess("插入成功");
     }
 
