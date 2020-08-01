@@ -1,50 +1,108 @@
-package com.summer.tree.util;/*
-@Author qqz
-@create 2020-07-11  18:10
-*/
+package com.summer.tree.util;
 
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.EncodeHintType;
-import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.*;
+import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
+import com.google.zxing.common.HybridBinarizer;
+import com.google.zxing.qrcode.QRCodeReader;
+import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
-import java.io.File;
-import java.nio.file.Path;
-import java.util.HashMap;
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.util.Hashtable;
 
-public class ZxingUtil {
-    //content是内容，path是存储地址
-    public static boolean getZxing(String content , String path){
-        /*
-         * 图片的宽度和高度
-         */
-        //默认300高，300宽
-        int width = 300;
-        int height = 300;
-        // 图片的格式
-        String format = "png";
+/**
+ * @Description:
+ * @Author: july
+ * @Date: 2020-07-17 13:59
+ **/
+public class ZXingUtil {
+    /**
+     * 生成包含字符串信息的二维码图片
+     *
+     * @param outputStream 文件输出流路径
+     * @param content      二维码携带信息
+     * @param qrCodeSize   二维码图片大小
+     * @param imageFormat  二维码的格式
+     * @throws WriterException
+     * @throws IOException
+     */
+    public static boolean createQrCode(OutputStream outputStream, String content, int qrCodeSize, String imageFormat) throws WriterException, IOException {
+        //设置二维码纠错级别ＭＡＰ
+        Hashtable<EncodeHintType, ErrorCorrectionLevel> hintMap = new Hashtable<EncodeHintType, ErrorCorrectionLevel>();
+        hintMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.M);  // 矫错级别
+        QRCodeWriter qrCodeWriter = new QRCodeWriter();
+        //创建比特矩阵(位矩阵)的QR码编码的字符串
+        BitMatrix byteMatrix = qrCodeWriter.encode(content, BarcodeFormat.QR_CODE, qrCodeSize, qrCodeSize, hintMap);
+        // 使BufferedImage勾画QRCode  (matrixWidth 是行二维码像素点)
+        int matrixWidth = byteMatrix.getWidth();
+        BufferedImage image = new BufferedImage(matrixWidth - 200, matrixWidth - 200, BufferedImage.TYPE_INT_RGB);
+        image.createGraphics();
+        Graphics2D graphics = (Graphics2D) image.getGraphics();
+        graphics.setColor(Color.WHITE);
+        graphics.fillRect(0, 0, matrixWidth, matrixWidth);
+        // 使用比特矩阵画并保存图像
+        graphics.setColor(Color.BLACK);
+        for (int i = 0; i < matrixWidth; i++) {
+            for (int j = 0; j < matrixWidth; j++) {
+                if (byteMatrix.get(i, j)) {
+                    graphics.fillRect(i - 100, j - 100, 1, 1);
+                }
+            }
+        }
+        return ImageIO.write(image, imageFormat, outputStream);
+    }
 
-        // 定义二维码的参数
-        HashMap<EncodeHintType, Object> hints = new HashMap<EncodeHintType, Object>();
-        // 定义字符集编码格式
-        hints.put(EncodeHintType.CHARACTER_SET, "utf-8");
-        // 纠错的等级 L > M > Q > H 纠错的能力越高可存储的越少，一般使用M
+    public static void generateQRImage(String txt, String imgName, String suffix){
+
+        String imgPath = "/usr/local/javaresource";
+        File imageFile = new File(imgPath,imgName);
+        Hashtable<EncodeHintType, Object> hints = new Hashtable<EncodeHintType, Object>();
+        // 指定纠错等级
         hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.M);
-        // 设置图片边距
-        hints.put(EncodeHintType.MARGIN, 2);
-
+        // 指定编码格式
+        hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
         try {
-            // 最终生成 参数列表 （1.内容 2.格式 3.宽度 4.高度 5.二维码参数）
-            BitMatrix bitMatrix = new MultiFormatWriter ().encode(content, BarcodeFormat.QR_CODE, width, height, hints);
-            // 写入到本地
-            Path file = new File (path).toPath();
-            MatrixToImageWriter.writeToPath(bitMatrix, format, file);
-            return true;
+            BitMatrix bitMatrix = new MultiFormatWriter().encode(txt,BarcodeFormat.QR_CODE, 300, 300, hints);
+//        	bitMatrix = deleteWhite(bitMatrix);
+            MatrixToImageWriter.writeToPath(bitMatrix, suffix, imageFile.toPath());
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
         }
+    }
+
+    /**
+     * 读二维码并输出携带的信息
+     */
+    public static void readQrCode(InputStream inputStream) throws IOException {
+        //从输入流中获取字符串信息
+        BufferedImage image = ImageIO.read(inputStream);
+        //将图像转换为二进制位图源
+        LuminanceSource source = new BufferedImageLuminanceSource(image);
+        BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+        QRCodeReader reader = new QRCodeReader();
+        Result result = null;
+        try {
+            result = reader.decode(bitmap);
+        } catch (ReaderException e) {
+            e.printStackTrace();
+        }
+        System.out.println(result.getText());
+    }
+
+    /**
+     * 测试代码
+     *
+     * @throws WriterException
+     */
+    public static void main(String[] args) throws IOException, WriterException {
+        //生成二维码到E盘
+        createQrCode(new FileOutputStream(new File("E:\\test.jpg")), "https://www.baidu.com/", 900, "JPEG");
+        //下面是读取二维码内容
+        readQrCode(new FileInputStream(new File("E:\\test.jpg")));
     }
 }
