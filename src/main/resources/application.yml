@@ -4,10 +4,10 @@ spring:
     active: prod
   datasource:
     #数据源基本配置
-    username: root
-    password: 123456
+    username: xxxxx
+    password: xxxxx
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://47.95.214.19:3306/tree?useunicode=true&characterEncoding=utf8
+    url: jdbc:mysql://xxxxxxxxxxxxxxxxx/tree?useunicode=true&characterEncoding=utf8
     type: com.alibaba.druid.pool.DruidDataSource
     #数据源其他配置
     initialSize: 5
@@ -41,4 +41,4 @@ fdfs:
   so-timeout: 1500
   connect-timeout: 600
   tracker-list: # tracker地址
-  - 39.97.235.23:22122
+  - xxxxxxxxxxxxx
